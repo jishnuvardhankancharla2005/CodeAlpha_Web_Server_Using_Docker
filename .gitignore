@@ -1,0 +1,11 @@
+# Logs & Temporary Files
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+
+# Local Environment Overrides
+.env.local

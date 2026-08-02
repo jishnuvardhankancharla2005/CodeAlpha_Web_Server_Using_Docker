@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Scaled Web Server & Load Balancer Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="navbar glass-card">
+            <div class="brand">
+                <div class="docker-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M13.983 11.078h2.119v-2.07h-2.119v2.07zm-2.825 0h2.118v-2.07h-2.118v2.07zm-2.826 0h2.118v-2.07H8.332v2.07zm-2.825 0h2.118v-2.07H5.507v2.07zm5.65-2.812h2.118V6.195h-2.118v2.071zm-2.825 0h2.118V6.195H8.332v2.071zm-2.825 0h2.118V6.195H5.507v2.071zm5.65-2.813h2.118V3.382h-2.118v2.071zM23.77 12.016c-.347-.233-1.427-.852-2.895-.852-.56 0-1.127.094-1.678.272a7.697 7.697 0 0 0-2.316-2.585l-.337-.225-.262.308c-.463.543-.775 1.25-.918 2.052H.23c-.15 0-.23.136-.23.23.003 3.66 1.157 7.234 3.992 9.07 1.834 1.186 4.316 1.705 7.155 1.705 6.643 0 11.833-3.666 12.87-9.75.051-.303-.028-.535-.247-.68zM.912 12.85h2.119v2.07H.912v-2.07zm2.825 0h2.118v2.07H3.737v-2.07zm2.826 0h2.118v2.07H6.563v-2.07zm2.825 0h2.118v2.07H9.388v-2.07zm2.825 0h2.119v2.07h-2.119v-2.07z" />
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>Docker Production Stack</h1>
+                    <span class="subtitle">Nginx Load Balancer • Scaled Web Replicas • Redis</span>
+                </div>
+            </div>
+            <div class="status-badge glass-card">
+                <span class="pulse-dot"></span>
+                <span class="status-text" id="server-status">Load Balancer & Replicas Healthy</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Grid -->
+        <main class="dashboard-grid">
+            <!-- Hero Banner Card -->
+            <section class="card glass-card hero-card">
+                <div class="hero-content">
+                    <div class="pill-tag">
+                        <span class="sparkle">⚡</span> High Availability Scaled Cluster Active
+                    </div>
+                    <h2>Load Balanced Nginx Cluster inside Docker</h2>
+                    <p>Production-ready architecture featuring Nginx reverse proxy load balancing, horizontally scaled
+                        web container replicas, resource governance limits, and dual-tier network isolation.</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="replica-id-display">Fetching...</span>
+                            <span class="stat-label">Active Serving Replica ID</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">3 Replicas</span>
+                            <span class="stat-label">Horizontal Scale</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">256MB / 0.5 CPU</span>
+                            <span class="stat-label">Resource Limits / Replica</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="uptime-counter">00:00:00</span>
+                            <span class="stat-label">Session Uptime</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Load Balancer & Architecture Card -->
+            <section class="card glass-card info-card">
+                <div class="card-header">
+                    <div class="header-title">
+                        <span class="icon">⚖️</span>
+                        <h3>Load Balancing & Multi-Tier Topology</h3>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btn-test-lb">
+                        <span class="refresh-icon">🔀</span> Test LB Switch
+                    </button>
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-node">
+                        <span class="node-icon">🌐</span>
+                        <div class="node-info">
+                            <span class="node-title">Load Balancer</span>
+                            <span class="node-detail">localhost:8088</span>
+                        </div>
+                    </div>
+                    <div class="connector-line">
+                        <span class="flow-arrow">➔</span>
+                        <span class="port-label">frontend-net</span>
+                    </div>
+                    <div class="spec-node active-node">
+                        <span class="node-icon">🐳</span>
+                        <div class="node-info">
+                            <span class="node-title">Web Replicas (x3)</span>
+                            <span class="node-detail" id="lb-current-node">webserver:80</span>
+                        </div>
+                    </div>
+                    <div class="connector-line">
+                        <span class="flow-arrow">➔</span>
+                        <span class="port-label">backend-net</span>
+                    </div>
+                    <div class="spec-node">
+                        <span class="node-icon">🗄️</span>
+                        <div class="node-info">
+                            <span class="node-title">Redis Database</span>
+                            <span class="node-detail">Isolated DB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="volume-badge">
+                    <span class="vol-icon">🔒</span>
+                    <span>Network Security: <b>backend-net</b> is internal-only & isolated from host access.</span>
+                </div>
+            </section>
+
+            <!-- Health & Monitoring Card -->
+            <section class="card glass-card health-card">
+                <div class="card-header">
+                    <div class="header-title">
+                        <span class="icon">🩺</span>
+                        <h3>Health & Resource Governance</h3>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btn-refresh-health">
+                        <span class="refresh-icon">🔄</span> Check Health
+                    </button>
+                </div>
+                <div class="health-metrics">
+                    <div class="metric-row">
+                        <span class="metric-name">Load Balancer Health Probe</span>
+                        <span class="metric-value status-healthy" id="lb-health-indicator">passing (healthy)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Replica Health Probes</span>
+                        <span class="metric-value status-healthy">3 / 3 Healthy</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Container CPU Limit</span>
+                        <span class="metric-value">0.50 Cores</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Container RAM Limit</span>
+                        <span class="metric-value">256.0 MB</span>
+                    </div>
+                </div>
+                <div class="terminal-mini">
+                    <div class="terminal-bar">
+                        <span class="term-dot dot-red"></span>
+                        <span class="term-dot dot-yellow"></span>
+                        <span class="term-dot dot-green"></span>
+                        <span class="term-title">docker stats --no-stream</span>
+                    </div>
+                    <pre class="terminal-body"><code>CONTAINER ID   NAME                 CPU %     MEM USAGE / LIMIT
+ce16860e0a5a   webserver-lb         0.05%     6.4MiB / 256MiB
+5170647996d4   webserver-replica-1  0.12%     12.1MiB / 256MiB
+89a12c418e21   webserver-replica-2  0.10%     11.8MiB / 256MiB
+3f4a12901b5c   webserver-replica-3  0.11%     12.0MiB / 256MiB</code></pre>
+                </div>
+            </section>
+
+            <!-- Advanced Docker Command Cheat-sheet Card -->
+            <section class="card glass-card commands-card">
+                <div class="card-header">
+                    <div class="header-title">
+                        <span class="icon">📜</span>
+                        <h3>Advanced Production Commands</h3>
+                    </div>
+                </div>
+                <div class="command-list">
+                    <div class="command-item">
+                        <div class="cmd-top">
+                            <span class="cmd-tag">Scale Replicas</span>
+                            <code>docker compose up -d --scale webserver=5</code>
+                        </div>
+                        <p class="cmd-desc">Horizontally scales web server cluster to 5 backend container replicas on
+                            demand.</p>
+                    </div>
+                    <div class="command-item">
+                        <div class="cmd-top">
+                            <span class="cmd-tag">Resource Stats</span>
+                            <code>docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"</code>
+                        </div>
+                        <p class="cmd-desc">Monitors live CPU & Memory resource usage against defined 256MB container
+                            limits.</p>
+                    </div>
+                    <div class="command-item">
+                        <div class="cmd-top">
+                            <span class="cmd-tag">Crash Simulation</span>
+                            <code>docker exec -it &lt;container_id&gt; kill 1</code>
+                        </div>
+                        <p class="cmd-desc">Simulates PID 1 crash; tests Docker restart policies and Nginx load balancer
+                            failover.</p>
+                    </div>
+                    <div class="command-item">
+                        <div class="cmd-top">
+                            <span class="cmd-tag">Network Isolation</span>
+                            <code>docker network inspect codealpha_backend-net</code>
+                        </div>
+                        <p class="cmd-desc">Inspects isolated bridge network routing between web replicas and Redis
+                            database.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer glass-card">
+            <p>Advanced Production Web Server Stack • Docker Compose • Nginx Reverse Proxy • Alpine Linux</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

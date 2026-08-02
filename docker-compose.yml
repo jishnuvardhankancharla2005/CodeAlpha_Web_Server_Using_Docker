@@ -1,0 +1,98 @@
+services:
+  # 1. Nginx Reverse Proxy / Load Balancer Service
+  load-balancer:
+    build:
+      context: ./lb
+      dockerfile: Dockerfile
+    container_name: webserver-loadbalancer
+    ports:
+      - "8088:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/lb-healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      webserver:
+        condition: service_started
+    networks:
+      - frontend-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+
+  # 2. Scalable Web Server Service (Nginx Alpine Replicas)
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    environment:
+      - NODE_ENV=production
+      - CONTAINER_MEMORY_LIMIT=256M
+      - CACHE_HOST=db-cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      db-cache:
+        condition: service_healthy
+    networks:
+      - frontend-net
+      - backend-net
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.10'
+          memory: 64M
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+
+  # 3. Secure Internal Database & Caching Service (Redis Alpine)
+  # Isolated on backend-net (not exposed to host machine ports)
+  db-cache:
+    image: redis:7-alpine
+    container_name: webserver-redis-db
+    volumes:
+      - cache_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - backend-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+
+networks:
+  # External-facing bridge network for Load Balancer <-> Web Server Replicas
+  frontend-net:
+    driver: bridge
+  # Strictly internal bridge network for Web Server Replicas <-> Redis Database
+  backend-net:
+    driver: bridge
+    internal: true
+
+volumes:
+  cache_data:
+    driver: local
