@@ -1,0 +1,111 @@
+<svg width="900" height="380" viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#0c1e2e"/>
+    </linearGradient>
+    <linearGradient id="lbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#009639"/>
+      <stop offset="100%" stop-color="#025f24"/>
+    </linearGradient>
+    <linearGradient id="webGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2496ED"/>
+      <stop offset="100%" stop-color="#0f5fa8"/>
+    </linearGradient>
+    <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DC382D"/>
+      <stop offset="100%" stop-color="#8f1f18"/>
+    </linearGradient>
+    <linearGradient id="clientGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <filter id="glow4" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .p1{animation:pulse 2.2s ease-in-out infinite}
+      .p2{animation:pulse 2.2s ease-in-out infinite .3s}
+      .p3{animation:pulse 2.2s ease-in-out infinite .6s}
+      .p4{animation:pulse 2.2s ease-in-out infinite .9s}
+      .p5{animation:pulse 2.2s ease-in-out infinite 1.2s}
+      @keyframes pulse{0%{opacity:.75}50%{opacity:1}100%{opacity:.75}}
+      .flow{stroke-dasharray:7 5;animation:dash 1s linear infinite}
+      @keyframes dash{to{stroke-dashoffset:-24}}
+      .ttl{font-family:'Segoe UI',Helvetica,Arial,sans-serif;fill:#fff;font-weight:700}
+      .sub{font-family:'Segoe UI',Helvetica,Arial,sans-serif;fill:#cbd5e1;font-size:11px}
+      .tag{font-family:'Segoe UI',Helvetica,Arial,sans-serif;fill:#94a3b8;font-size:11px}
+      .heart{animation:beat 1.4s ease-in-out infinite}
+      @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+    </style>
+  </defs>
+
+  <rect width="900" height="380" rx="16" fill="url(#bg4)"/>
+  <text x="450" y="30" text-anchor="middle" class="ttl" font-size="17">🐳 Docker Web Server — Load-Balanced, Self-Healing Cluster</text>
+  <text x="450" y="49" text-anchor="middle" class="tag">Auto-healing replicas behind Nginx, with isolated network tiers</text>
+
+  <!-- Client -->
+  <g class="p1" filter="url(#glow4)">
+    <rect x="30" y="150" width="150" height="70" rx="12" fill="url(#clientGrad)" stroke="#fff" stroke-opacity="0.25"/>
+  </g>
+  <text x="105" y="180" text-anchor="middle" class="ttl" font-size="13">💻 Client</text>
+  <text x="105" y="198" text-anchor="middle" class="sub">:8088 request</text>
+
+  <!-- Load Balancer -->
+  <g class="p2" filter="url(#glow4)">
+    <rect x="230" y="150" width="170" height="70" rx="12" fill="url(#lbGrad)" stroke="#fff" stroke-opacity="0.25"/>
+  </g>
+  <text x="315" y="178" text-anchor="middle" class="ttl" font-size="13">⚖️ Nginx LB</text>
+  <text x="315" y="196" text-anchor="middle" class="sub">least_conn routing</text>
+
+  <!-- Web replicas -->
+  <g class="p3" filter="url(#glow4)"><rect x="470" y="70" width="150" height="55" rx="10" fill="url(#webGrad)" stroke="#fff" stroke-opacity="0.25"/></g>
+  <text x="545" y="93" text-anchor="middle" class="ttl" font-size="12">🐳 Web-1</text>
+  <text x="545" y="110" text-anchor="middle" class="sub">HEALTHCHECK ✓</text>
+
+  <g class="p4" filter="url(#glow4)"><rect x="470" y="145" width="150" height="55" rx="10" fill="url(#webGrad)" stroke="#fff" stroke-opacity="0.25"/></g>
+  <text x="545" y="168" text-anchor="middle" class="ttl" font-size="12">🐳 Web-2</text>
+  <text x="545" y="185" text-anchor="middle" class="sub">HEALTHCHECK ✓</text>
+
+  <g class="p5" filter="url(#glow4)"><rect x="470" y="220" width="150" height="55" rx="10" fill="url(#webGrad)" stroke="#fff" stroke-opacity="0.25"/></g>
+  <text x="545" y="243" text-anchor="middle" class="ttl" font-size="12">🐳 Web-3</text>
+  <text x="545" y="260" text-anchor="middle" class="sub">auto-restart on crash</text>
+
+  <!-- Redis -->
+  <g class="p1" filter="url(#glow4)">
+    <rect x="700" y="145" width="170" height="70" rx="12" fill="url(#dbGrad)" stroke="#fff" stroke-opacity="0.25"/>
+  </g>
+  <text x="785" y="173" text-anchor="middle" class="ttl" font-size="13">🗄️ Redis Cache</text>
+  <text x="785" y="191" text-anchor="middle" class="sub">backend-net only</text>
+
+  <!-- Client -> LB -->
+  <path d="M180 185 H228" stroke="#f8fafc" stroke-width="2.2" class="flow" fill="none"/>
+  <circle r="4" fill="#fff"><animateMotion dur="1.2s" repeatCount="indefinite" path="M180 185 H228"/></circle>
+
+  <!-- LB -> replicas -->
+  <path d="M400 175 L468 97" stroke="#f8fafc" stroke-width="2" class="flow" fill="none"/>
+  <circle r="3.5" fill="#fff"><animateMotion dur="1.4s" repeatCount="indefinite" path="M400 175 L468 97"/></circle>
+  <path d="M400 185 H468" stroke="#f8fafc" stroke-width="2" class="flow" fill="none"/>
+  <circle r="3.5" fill="#fff"><animateMotion dur="1.4s" repeatCount="indefinite" path="M400 185 H468"/></circle>
+  <path d="M400 195 L468 247" stroke="#f8fafc" stroke-width="2" class="flow" fill="none"/>
+  <circle r="3.5" fill="#fff"><animateMotion dur="1.4s" repeatCount="indefinite" path="M400 195 L468 247"/></circle>
+
+  <!-- Replicas -> Redis -->
+  <path d="M620 97 L698 165" stroke="#fca5a5" stroke-width="1.6" class="flow" fill="none"/>
+  <path d="M620 172 H698" stroke="#fca5a5" stroke-width="1.6" class="flow" fill="none"/>
+  <path d="M620 247 L698 190" stroke="#fca5a5" stroke-width="1.6" class="flow" fill="none"/>
+
+  <!-- Health pulse heart on Web-3 (crash/recover indicator) -->
+  <text x="600" y="252" class="heart" font-size="14">❤️</text>
+
+  <!-- Network isolation boundaries -->
+  <rect x="215" y="55" width="420" height="235" rx="16" fill="none" stroke="#38bdf8" stroke-width="1.3" stroke-dasharray="4 4"/>
+  <text x="240" y="70" class="tag" fill="#38bdf8">frontend-net</text>
+
+  <rect x="455" y="60" width="430" height="230" rx="16" fill="none" stroke="#f87171" stroke-width="1.3" stroke-dasharray="4 4"/>
+  <text x="860" y="285" text-anchor="end" class="tag" fill="#f87171">backend-net (isolated)</text>
+
+  <text x="450" y="345" text-anchor="middle" class="tag">Direct host access to Redis is blocked — only reachable from web replicas on backend-net</text>
+  <text x="450" y="363" text-anchor="middle" class="tag">CPU/memory quotas enforced per container · zero-downtime failover on crash</text>
+</svg>
