@@ -22,6 +22,12 @@
  |____/ \___/ \___|_|\_\___|_|      \_/\_/ \___|_.__/|____/ \___|_|    \_/ \___|_|   
 ```
 
+<br/>
+
+<img src="./assets/task4-docker-webserver-animated.svg" alt="Animated architecture diagram of the load-balanced, self-healing Docker web server cluster" width="100%"/>
+
+<br/><br/>
+
 <p align="center">
   <a href="#-key-features">Key Features</a> •
   <a href="#-architecture-diagram">Architecture</a> •
@@ -91,8 +97,8 @@ graph TD
 
 ### 1. Clone & Navigate to Repository
 ```bash
-git clone https://github.com/your-username/CodeAlpha_Web-Server-using-Docker.git
-cd "CodeAlpha_Web Server using Docker"
+git clone https://github.com/jishnuvardhankancharla2005/CodeAlpha_Web_Server_Using_Docker.git
+cd CodeAlpha_Web_Server_Using_Docker
 ```
 
 ### 2. Launch the Application Stack
