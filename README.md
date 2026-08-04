@@ -3,7 +3,7 @@
 # 🐳 Enterprise Docker Web Server & Orchestration Stack
 
 <p align="center">
-  <b>A Production-Grade, High-Availability Nginx Load-Balanced Web Server Cluster with Auto-Healing & Multi-Tier Network Isolation</b>
+  <b>A Production-Grade, High-Availability Nginx Load-Balanced Web Server Cluster with Auto-Healing &amp; Multi-Tier Network Isolation</b>
 </p>
 
 [![Docker](https://img.shields.io/badge/Docker-29.4.3-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
@@ -30,7 +30,7 @@
 
 <p align="center">
   <a href="#-key-features">Key Features</a> •
-  <a href="#-architecture-diagram">Architecture</a> •
+  <a href="#%EF%B8%8F-animated-system-architecture">Animated Architecture</a> •
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-live-demonstration-suite">Live Demo Suite</a> •
   <a href="#-production-specifications">Specifications</a>
@@ -48,13 +48,23 @@
 | ⚡ **Horizontal Scaling** | Dynamic multi-replica cluster scaling up to 5+ web nodes without downtime | `ACTIVE` |
 | 🛡️ **Network Isolation** | Dual-tier bridge networking (`frontend-net` & `backend-net` with host isolation) | `SECURED` |
 | 🩺 **Proactive Health Probes** | Automated `HEALTHCHECK` directives monitoring probes every 10s | `MONITORED` |
-| 🔄 **Auto-Healing & Failover** | Instant zero-downtime failover and `on-failure` container auto-recovery | `ENABLED` |
+| 🔄 **Auto-Healing & Failover** | Instant zero-downtime failover and container auto-recovery | `ENABLED` |
 | 💾 **Volume Persistence** | Real-time stateless container content mounting from host `./html` folder | `PERSISTED` |
 | ⚙️ **Resource Limits** | Strict CPU (`0.50` cores) & Memory (`256MB`) quotas per container | `ENFORCED` |
 
 ---
 
-## 🏗️ Architecture Diagram
+## 🏗️ Animated System Architecture
+
+Below is the dynamic real-time traffic flow showing live client requests, Nginx load balancing, backend container distribution, isolated Redis database queries, and host volume synchronization.
+
+<div align="center">
+
+![Animated System Architecture Diagram](architecture.svg)
+
+</div>
+
+### 📊 Structural Component Flow
 
 ```mermaid
 graph TD
@@ -140,13 +150,24 @@ docker compose down
 The project includes custom PowerShell automation scripts in `./scripts/` to demonstrate advanced container operations:
 
 ```
-CodeAlpha_Web Server using Docker/
-├── scripts/
-│   ├── scale-demo.ps1        # Demonstrates horizontal scaling & round-robin routing
-│   ├── simulate-crash.ps1    # Simulates container crash, zero-downtime failover & auto-healing
-│   ├── test-advanced.ps1     # Tests resource stats, network isolation & volume edits
-│   ├── test-lifecycle.ps1    # Tests container start, stop, restart, inspect, logs
-│   └── build-and-run.ps1     # Single container launcher
+CodeAlpha_Web_Server_using_Docker/
+├── architecture.svg          # Animated SVG Architecture Diagram
+├── Dockerfile                # Custom Nginx Web Server Image Definition
+├── docker-compose.yml        # Multi-Container Stack Specification
+├── nginx.conf                # Web Server Configuration
+├── html/                     # Interactive Dashboard UI & Assets
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── lb/                       # Nginx Reverse Proxy & Load Balancer
+│   ├── Dockerfile
+│   └── nginx.conf
+└── scripts/
+    ├── scale-demo.ps1        # Dynamic horizontal scaling & request routing test
+    ├── simulate-crash.ps1    # Container crash, zero-downtime failover & auto-healing test
+    ├── test-advanced.ps1     # Resource limits, volume edits & network isolation test
+    ├── test-lifecycle.ps1    # Container start, stop, restart & log stream test
+    └── build-and-run.ps1     # Single container builder & launcher
 ```
 
 ### 1. Scaling & Load Balancing Test
@@ -171,7 +192,7 @@ CodeAlpha_Web Server using Docker/
 
 ## 📋 Production Specifications
 
-### Container Resource Limits
+### Container Resource Governance
 ```yaml
 webserver:
   deploy:
@@ -185,7 +206,7 @@ webserver:
         memory: 64M
 ```
 
-### Network Topology Matrix
+### Dual-Tier Network Topology Matrix
 
 | Network | Type | Internal Only | Members | Purpose |
 | :--- | :--- | :---: | :--- | :--- |
@@ -201,6 +222,7 @@ Distributed under the MIT License. Contributions and feedback are welcome!
 <div align="center">
 
 ---
+
 Developed for **CodeAlpha Cloud & DevOps Engineering** • Powered by Docker & Nginx Alpine
 
 </div>
